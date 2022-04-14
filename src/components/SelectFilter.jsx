@@ -2,38 +2,15 @@ import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "proptypes";
 import { v4 as uuidv4 } from "uuid";
 import { FiltersContext } from "../context/FiltersProvider";
+import request from "../config/request";
 
 const SelectFilter = ({ onSelect }) => {
   const { filters, dispatch } = useContext(FiltersContext);
   const [currentFilter, setCurrentFilter] = useState("");
 
-  useEffect(() => {
-    // TODO: get from api
-    const filters = [
-      {
-        id: 1,
-        name: "1",
-        data: {
-          firstName: {
-            filter: "andres",
-            filterType: "text",
-            type: "contains",
-          },
-        },
-      },
-      {
-        id: 2,
-        name: "2",
-        data: {
-          firstName: {
-            filter: "lio",
-            filterType: "text",
-            type: "contains",
-          },
-        },
-      },
-    ];
-    dispatch({ type: "set", payload: { filters } });
+  useEffect(async () => {
+    const filters = await request("filters");
+    dispatch({ type: "set", payload: filters.filters });
   }, []);
 
   const handleSelect = (event) => {

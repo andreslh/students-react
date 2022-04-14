@@ -7,12 +7,14 @@ export async function request(
   url,
   config = {
     method: "GET",
+    headers: undefined,
     body: undefined,
   }
 ) {
-  const { method, body } = config;
+  const { method, headers, body } = config;
   const response = await fetch(`${server}/api/${url}`, {
     method,
+    headers,
     body,
   });
   if (!response.ok) {

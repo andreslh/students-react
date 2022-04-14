@@ -7,7 +7,7 @@ const reducer = (state, action) => {
   if (action.type === "set") {
     return {
       ...state,
-      filters: action.payload.filters,
+      filters: action.payload,
     };
   }
 

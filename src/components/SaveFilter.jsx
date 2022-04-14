@@ -1,22 +1,35 @@
 import React, { useContext, useState } from "react";
 import PropTypes from "proptypes";
 import { FiltersContext } from "../context/FiltersProvider";
+import request from "../config/request";
 
 const SaveFilter = () => {
   const [name, setName] = useState("");
   const { current, dispatch } = useContext(FiltersContext);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (current) {
-      // TODO: Save on api
-      dispatch({
-        type: "add",
-        payload: {
-          id: 3,
-          name,
-          data: current,
+      const newFilter = await request("filters", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({ name, data: current }),
       });
+
+      if (newFilter) {
+        dispatch({
+          type: "add",
+          payload: {
+            id: newFilter.filter.id,
+            name,
+            data: current,
+          },
+        });
+      }
+
+      //TODO: Show notification
     }
   };
 
