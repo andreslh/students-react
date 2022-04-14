@@ -1,41 +1,33 @@
-import React, { useState } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { useNavigate } from 'react-router-dom';
-import Notification from './Notification';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useNavigate } from "react-router-dom";
+import Notification from "./Notification";
 
-const newStudentData = {
-  firstName: '',
-  lastName: '',
-  username: '',
-  schoolName: '',
-  license: '',
-  avatar: '',
-};
-
-const StudentForm = ({ title = 'Add Student', studentData, onSubmit }) => {
+const StudentForm = ({ title, studentData, onSubmit }) => {
   const navigate = useNavigate();
   const [submitError, setSubmitError] = useState(false);
 
   return (
     <Formik
-      initialValues={studentData || newStudentData}
-      validate={values => {
+      initialValues={studentData}
+      validate={(values) => {
         const errors = {};
 
         if (!values.firstName) {
-          errors.firstName = 'First name is required';
+          errors.firstName = "First name is required";
         }
         if (!values.lastName) {
-          errors.lastName = 'Last name is required';
+          errors.lastName = "Last name is required";
         }
         if (!values.username) {
-          errors.username = 'Username is required';
+          errors.username = "Username is required";
         }
         if (!values.schoolName) {
-          errors.schoolName = 'School name is required';
+          errors.schoolName = "School name is required";
         }
         if (!values.license) {
-          errors.license = 'License is required';
+          errors.license = "License is required";
         }
         if (submitError) {
           setSubmitError(false);
@@ -47,7 +39,7 @@ const StudentForm = ({ title = 'Add Student', studentData, onSubmit }) => {
         onSubmit(values).then((response) => {
           setSubmitting(false);
           if (response) {
-            navigate('/?message=student_added');
+            navigate("/?message=student_added");
           } else {
             setSubmitError(true);
           }
@@ -60,46 +52,91 @@ const StudentForm = ({ title = 'Add Student', studentData, onSubmit }) => {
             <h2 className="mb-5">{title}</h2>
             <Form>
               <div className="form-group">
-              <label htmlFor="firstName" className="font-weight-bold">First Name</label>
+                <label htmlFor="firstName" className="font-weight-bold">
+                  First Name
+                </label>
                 <Field type="text" name="firstName" className="form-control" />
               </div>
-              <ErrorMessage className="text-danger" name="firstName" component="p" />
+              <ErrorMessage
+                className="text-danger"
+                name="firstName"
+                component="p"
+              />
 
               <div className="form-group">
-              <label htmlFor="lastName" className="font-weight-bold">Last Name</label>
+                <label htmlFor="lastName" className="font-weight-bold">
+                  Last Name
+                </label>
                 <Field type="text" name="lastName" className="form-control" />
               </div>
-              <ErrorMessage className="text-danger" name="lastName" component="p" />
+              <ErrorMessage
+                className="text-danger"
+                name="lastName"
+                component="p"
+              />
 
               <div className="form-group">
-              <label htmlFor="username" className="font-weight-bold">Username</label>
+                <label htmlFor="username" className="font-weight-bold">
+                  Username
+                </label>
                 <Field type="text" name="username" className="form-control" />
               </div>
-              <ErrorMessage className="text-danger" name="username" component="p" />
+              <ErrorMessage
+                className="text-danger"
+                name="username"
+                component="p"
+              />
 
               <div className="form-group">
-              <label htmlFor="schoolName" className="font-weight-bold">School Name</label>
+                <label htmlFor="schoolName" className="font-weight-bold">
+                  School Name
+                </label>
                 <Field type="text" name="schoolName" className="form-control" />
               </div>
-              <ErrorMessage className="text-danger" name="schoolName" component="p" />
+              <ErrorMessage
+                className="text-danger"
+                name="schoolName"
+                component="p"
+              />
 
               <div className="form-group">
-                <div className="form-check font-weight-bold" id="license-radio-group">License</div>
+                <div
+                  className="form-check font-weight-bold"
+                  id="license-radio-group"
+                >
+                  License
+                </div>
                 <div role="group" aria-labelledby="license-radio-group">
                   <label className="ml-4 d-block">
-                    <Field type="radio" name="license" value="licensed" className="form-check-input"/>
-                      Licensed
+                    <Field
+                      type="radio"
+                      name="license"
+                      value="licensed"
+                      className="form-check-input"
+                    />
+                    Licensed
                   </label>
                   <label className="ml-4 d-block">
-                    <Field type="radio" name="license" value="not licensed" className="form-check-input"/>
+                    <Field
+                      type="radio"
+                      name="license"
+                      value="not licensed"
+                      className="form-check-input"
+                    />
                     Not Licensed
                   </label>
                 </div>
               </div>
-              <ErrorMessage className="text-danger" name="license" component="p" />
+              <ErrorMessage
+                className="text-danger"
+                name="license"
+                component="p"
+              />
 
               <div className="form-group">
-                <label htmlFor="avatar" className="font-weight-bold">Student photo</label>
+                <label htmlFor="avatar" className="font-weight-bold">
+                  Student photo
+                </label>
                 <Field
                   type="file"
                   className="form-control-file"
@@ -107,13 +144,17 @@ const StudentForm = ({ title = 'Add Student', studentData, onSubmit }) => {
                   name="avatar"
                   value={undefined}
                   onChange={(event) => {
-                    setFieldValue('avatar', event.currentTarget.files[0]);
+                    setFieldValue("avatar", event.currentTarget.files[0]);
                   }}
                 />
               </div>
-                
+
               <div className="mt-5">
-                <button type="submit" disabled={isSubmitting} className="btn btn-primary">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="btn btn-primary"
+                >
                   Submit
                 </button>
 
@@ -133,7 +174,33 @@ const StudentForm = ({ title = 'Add Student', studentData, onSubmit }) => {
         </div>
       )}
     </Formik>
-  )
+  );
+};
+
+StudentForm.propTypes = {
+  title: PropTypes.string,
+  studentData: PropTypes.shape({
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    username: PropTypes.string,
+    schoolName: PropTypes.string,
+    license: PropTypes.string,
+    avatar: PropTypes.string,
+  }),
+  onSubmit: PropTypes.func,
+};
+
+StudentForm.defaultProps = {
+  title: "Add student",
+  studentData: {
+    firstName: "",
+    lastName: "",
+    username: "",
+    schoolName: "",
+    license: "",
+    avatar: "",
+  },
+  onSubmit: () => {},
 };
 
 export default StudentForm;

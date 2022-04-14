@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
-const Header  = () => {
+const Header = () => {
   return (
     <header>
       <div className="navbar navbar-dark bg-dark box-shadow">
