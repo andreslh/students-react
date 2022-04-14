@@ -4,6 +4,7 @@ import { AgGridReact } from "ag-grid-react";
 import request from "../config/request";
 import { StudentsContext } from "../context/StudentsProvider";
 import Notification from "../components/Notification";
+import EditButton from "../components/EditButton";
 
 const MESSAGES = {
   student_added: "The student was added successfully",
@@ -23,6 +24,12 @@ const Students = () => {
     { field: "username", flex: 1 },
     { field: "schoolName", flex: 1 },
     { field: "license", flex: 1 },
+    {
+      headerName: "Edit",
+      field: "id",
+      width: 100,
+      cellRenderer: "EditButton",
+    },
   ]);
 
   useEffect(async () => {
@@ -54,8 +61,11 @@ const Students = () => {
         <div className="col-md-12">
           <div className="ag-theme-alpine" style={{ height: "100vh" }}>
             <AgGridReact
-              rowData={studentsContext.students.students}
+              rowData={studentsContext.students}
               columnDefs={columns}
+              frameworkComponents={{
+                EditButton,
+              }}
             ></AgGridReact>
           </div>
         </div>

@@ -4,7 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useNavigate } from "react-router-dom";
 import Notification from "./Notification";
 
-const StudentForm = ({ title, studentData, onSubmit }) => {
+const StudentForm = ({ title, studentData, onSubmit, redirectTo }) => {
   const navigate = useNavigate();
   const [submitError, setSubmitError] = useState(false);
 
@@ -39,7 +39,7 @@ const StudentForm = ({ title, studentData, onSubmit }) => {
         onSubmit(values).then((response) => {
           setSubmitting(false);
           if (response) {
-            navigate("/?message=student_added");
+            navigate(redirectTo);
           } else {
             setSubmitError(true);
           }
@@ -188,6 +188,7 @@ StudentForm.propTypes = {
     avatar: PropTypes.string,
   }),
   onSubmit: PropTypes.func,
+  redirectTo: PropTypes.string.isRequired,
 };
 
 StudentForm.defaultProps = {
@@ -201,6 +202,7 @@ StudentForm.defaultProps = {
     avatar: "",
   },
   onSubmit: () => {},
+  redirectTo: "/?message=student_added",
 };
 
 export default StudentForm;
