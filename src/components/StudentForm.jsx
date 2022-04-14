@@ -44,8 +44,7 @@ const StudentForm = ({ title, studentData, onSubmit, redirectTo }) => {
             setSubmitError(true);
           }
         });
-      }}
-    >
+      }}>
       {({ isSubmitting, setFieldValue }) => (
         <div className="row mt-5 d-flex justify-content-center">
           <div className="col-xs-10 col-md-8">
@@ -57,11 +56,7 @@ const StudentForm = ({ title, studentData, onSubmit, redirectTo }) => {
                 </label>
                 <Field type="text" name="firstName" className="form-control" />
               </div>
-              <ErrorMessage
-                className="text-danger"
-                name="firstName"
-                component="p"
-              />
+              <ErrorMessage className="text-danger" name="firstName" component="p" />
 
               <div className="form-group">
                 <label htmlFor="lastName" className="font-weight-bold">
@@ -69,11 +64,7 @@ const StudentForm = ({ title, studentData, onSubmit, redirectTo }) => {
                 </label>
                 <Field type="text" name="lastName" className="form-control" />
               </div>
-              <ErrorMessage
-                className="text-danger"
-                name="lastName"
-                component="p"
-              />
+              <ErrorMessage className="text-danger" name="lastName" component="p" />
 
               <div className="form-group">
                 <label htmlFor="username" className="font-weight-bold">
@@ -81,11 +72,7 @@ const StudentForm = ({ title, studentData, onSubmit, redirectTo }) => {
                 </label>
                 <Field type="text" name="username" className="form-control" />
               </div>
-              <ErrorMessage
-                className="text-danger"
-                name="username"
-                component="p"
-              />
+              <ErrorMessage className="text-danger" name="username" component="p" />
 
               <div className="form-group">
                 <label htmlFor="schoolName" className="font-weight-bold">
@@ -93,17 +80,10 @@ const StudentForm = ({ title, studentData, onSubmit, redirectTo }) => {
                 </label>
                 <Field type="text" name="schoolName" className="form-control" />
               </div>
-              <ErrorMessage
-                className="text-danger"
-                name="schoolName"
-                component="p"
-              />
+              <ErrorMessage className="text-danger" name="schoolName" component="p" />
 
               <div className="form-group">
-                <div
-                  className="form-check font-weight-bold"
-                  id="license-radio-group"
-                >
+                <div className="form-check font-weight-bold" id="license-radio-group">
                   License
                 </div>
                 <div role="group" aria-labelledby="license-radio-group">
@@ -127,11 +107,7 @@ const StudentForm = ({ title, studentData, onSubmit, redirectTo }) => {
                   </label>
                 </div>
               </div>
-              <ErrorMessage
-                className="text-danger"
-                name="license"
-                component="p"
-              />
+              <ErrorMessage className="text-danger" name="license" component="p" />
 
               <div className="form-group">
                 <label htmlFor="avatar" className="font-weight-bold">
@@ -150,11 +126,7 @@ const StudentForm = ({ title, studentData, onSubmit, redirectTo }) => {
               </div>
 
               <div className="mt-5">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="btn btn-primary"
-                >
+                <button type="submit" disabled={isSubmitting} className="btn btn-primary">
                   Submit
                 </button>
 

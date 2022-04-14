@@ -9,15 +9,19 @@ import EditButton from "../components/EditButton";
 const MESSAGES = {
   student_added: "The student was added successfully",
   student_updated: "The student was updated successfully",
+  students_deleted: "The selected students were deleted",
 };
 
 const Students = () => {
   const studentsContext = useContext(StudentsContext);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [gridApi, setGridApi] = useState();
   const [message, setMessage] = useState(searchParams.get("message"));
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [columns] = useState([
+    { field: "id", width: 60, checkboxSelection: true, aggFunc: "sum" },
     { field: "id", width: 60 },
     { field: "firstName", flex: 1 },
     { field: "lastName", flex: 1 },
@@ -37,15 +41,38 @@ const Students = () => {
     studentsContext.dispatch({ type: "set", payload: students });
   }, []);
 
+  const onGridReady = (params) => {
+    setGridApi(params.api);
+  };
+
+  const deleteSelected = async () => {
+    let selectedStudents = gridApi.getSelectedNodes().map((student) => student.data.id);
+    try {
+      await request(`students?ids=${JSON.stringify(selectedStudents)}`, {
+        method: "DELETE",
+      });
+      const students = await request("students");
+      studentsContext.dispatch({ type: "set", payload: students });
+
+      setMessage("students_deleted");
+      setErrorMessage("");
+    } catch {
+      setMessage("");
+      setErrorMessage("There was a problem deleting the students");
+    }
+  };
+
   return (
     <>
       <div className="row">
         <div className="col-md-12 mt-5 mb-5 d-flex flex-row-reverse align-items-center justify-content-between">
+          <button type="button" className="btn btn-danger" onClick={deleteSelected}>
+            Delete selected
+          </button>
           <button
             type="button"
             className="btn btn-primary"
-            onClick={() => navigate("/add-student")}
-          >
+            onClick={() => navigate("/add-student")}>
             Add Student
           </button>
           {message && (
@@ -53,6 +80,14 @@ const Students = () => {
               message={MESSAGES[message]}
               closeIcon={true}
               closeFn={() => setMessage("")}
+            />
+          )}
+          {errorMessage && (
+            <Notification
+              message={errorMessage}
+              closeIcon={true}
+              closeFn={() => setErrorMessage("")}
+              type="danger"
             />
           )}
         </div>
@@ -66,7 +101,8 @@ const Students = () => {
               frameworkComponents={{
                 EditButton,
               }}
-            ></AgGridReact>
+              onGridReady={onGridReady}
+              rowSelection={"multiple"}></AgGridReact>
           </div>
         </div>
       </div>

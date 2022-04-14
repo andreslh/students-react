@@ -11,8 +11,7 @@ const Notification = ({ type, closeIcon, closeFn, message }) => (
         className="close ml-5"
         data-dismiss="alert"
         aria-label="Close"
-        onClick={closeFn}
-      >
+        onClick={closeFn}>
         <span aria-hidden="true">&times;</span>
       </button>
     )}

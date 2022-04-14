@@ -4,8 +4,7 @@ import request from "../config/request";
 import { StudentsContext } from "../context/StudentsProvider";
 import StudentForm from "../components/StudentForm";
 
-const findStudent = (list, id) =>
-  list.students.find((student) => student.id.toString() === id);
+const findStudent = (list, id) => list.students.find((student) => student.id.toString() === id);
 
 const UpdateStudent = () => {
   const { id } = useParams();
@@ -37,6 +36,7 @@ const UpdateStudent = () => {
       if (updatedStudent) {
         return true;
       }
+      return false;
     } catch {
       return false;
     }

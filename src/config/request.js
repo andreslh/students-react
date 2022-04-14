@@ -18,7 +18,8 @@ export async function request(
   if (!response.ok) {
     throw new Error(response.statusText);
   }
-  return await response.json();
+
+  return response.status !== 204 ? await response.json() : response;
 }
 
 export default request;
