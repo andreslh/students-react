@@ -1,141 +1,138 @@
-import React, { useReducer, useState } from 'react';
+import React, { useState } from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { useNavigate } from 'react-router-dom';
+import Notification from './Notification';
 
-const newStudentState = {
+const newStudentData = {
   firstName: '',
   lastName: '',
   username: '',
   schoolName: '',
-  license: 'licensed',
+  license: '',
   avatar: '',
 };
 
-const reducer = (student, action) => {
-  switch (action.type) {
-    case 'firstName':
-      return {
-        ...student,
-        firstName: action.payload
-      }
-    case 'lastName':
-      return {
-        ...student,
-        lastName: action.payload
-      }
-    case 'username':
-      return {
-        ...student,
-        username: action.payload
-      }
-    case 'schoolName':
-      return {
-        ...student,
-        schoolName: action.payload
-      }
-    case 'license':
-      return {
-        ...student,
-        license: action.payload
-      }
-    case 'avatar':
-      return {
-        ...student,
-        avatar: action.payload
-      }
-  }
-}
+const StudentForm = ({ title = 'Add Student', studentData, onSubmit }) => {
+  const navigate = useNavigate();
+  const [submitError, setSubmitError] = useState(false);
 
-const StudentForm = ({ studentData, onSubmit }) => {
-  const [student, dispatch] = useReducer(reducer, studentData || newStudentState);
-  
   return (
-    <form onSubmit={(e) => {
-      e.preventDefault();
-      onSubmit(student)}
-    }>
-      <div className="form-group">
-        <label htmlFor="firstName">First Name</label>
-        <input
-          type="text"
-          className="form-control"
-          id="firstName"
-          value={student.firstName}
-          onChange={(e) => dispatch({ type: 'firstName', payload: e.target.value })}
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="lastName">Last Name</label>
-        <input
-          type="text"
-          className="form-control"
-          id="lastName"
-          value={student.lastName}
-          onChange={(e) => dispatch({ type: 'lastName', payload: e.target.value })}
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="username">Username</label>
-        <input
-          type="text"
-          className="form-control"
-          id="username"
-          value={student.username}
-          onChange={(e) => dispatch({ type: 'username', payload: e.target.value })}
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="schoolName">School name</label>
-        <input
-          type="text"
-          className="form-control"
-          id="schoolName"
-          value={student.schoolName}
-          onChange={(e) => dispatch({ type: 'schoolName', payload: e.target.value })}
-        />
-      </div>
-      <div className="form-check">
-        <input
-          className="form-check-input"
-          type="radio"
-          name="license"
-          id="licensedRadio"
-          value="licensed"
-          checked={student.license === 'licensed'}
-          onChange={(e) => {
-            dispatch({ type: 'license', payload: e.target.value})
-          }}
-        />
-        <label className="form-check-label" htmlFor="licensedRadio">
-          Licensed
-        </label>
-      </div>
-      <div className="form-check">
-        <input
-          className="form-check-input"
-          type="radio"
-          name="license"
-          id="notLicensedRadio"
-          value="not licensed"
-          checked={student.license === 'not licensed'}
-          onChange={(e) => {
-            dispatch({ type: 'license', payload: e.target.value})
-          }}
-        />
-        <label className="form-check-label" htmlFor="notLicensedRadio">
-          Not licensed
-        </label>
-      </div>
-      <div className="form-group">
-        <label htmlFor="avatar">Student photo</label>
-        <input
-          type="file"
-          className="form-control-file"
-          id="avatar"
-          accept="image/*"
-          onChange={(e) => dispatch({ type: 'avatar', payload: e.target.files[0] })}
-        />
-      </div>
-      <button type="submit" className="btn btn-primary">Submit</button>
-    </form>
+    <Formik
+      initialValues={studentData || newStudentData}
+      validate={values => {
+        const errors = {};
+
+        if (!values.firstName) {
+          errors.firstName = 'First name is required';
+        }
+        if (!values.lastName) {
+          errors.lastName = 'Last name is required';
+        }
+        if (!values.username) {
+          errors.username = 'Username is required';
+        }
+        if (!values.schoolName) {
+          errors.schoolName = 'School name is required';
+        }
+        if (!values.license) {
+          errors.license = 'License is required';
+        }
+        if (submitError) {
+          setSubmitError(false);
+        }
+
+        return errors;
+      }}
+      onSubmit={(values, { setSubmitting }) => {
+        onSubmit(values).then((response) => {
+          setSubmitting(false);
+          if (response) {
+            navigate('/?message=student_added');
+          } else {
+            setSubmitError(true);
+          }
+        });
+      }}
+    >
+      {({ isSubmitting, setFieldValue }) => (
+        <div className="row mt-5 d-flex justify-content-center">
+          <div className="col-xs-10 col-md-8">
+            <h2 className="mb-5">{title}</h2>
+            <Form>
+              <div className="form-group">
+              <label htmlFor="firstName" className="font-weight-bold">First Name</label>
+                <Field type="text" name="firstName" className="form-control" />
+              </div>
+              <ErrorMessage className="text-danger" name="firstName" component="p" />
+
+              <div className="form-group">
+              <label htmlFor="lastName" className="font-weight-bold">Last Name</label>
+                <Field type="text" name="lastName" className="form-control" />
+              </div>
+              <ErrorMessage className="text-danger" name="lastName" component="p" />
+
+              <div className="form-group">
+              <label htmlFor="username" className="font-weight-bold">Username</label>
+                <Field type="text" name="username" className="form-control" />
+              </div>
+              <ErrorMessage className="text-danger" name="username" component="p" />
+
+              <div className="form-group">
+              <label htmlFor="schoolName" className="font-weight-bold">School Name</label>
+                <Field type="text" name="schoolName" className="form-control" />
+              </div>
+              <ErrorMessage className="text-danger" name="schoolName" component="p" />
+
+              <div className="form-group">
+                <div className="form-check font-weight-bold" id="license-radio-group">License</div>
+                <div role="group" aria-labelledby="license-radio-group">
+                  <label className="ml-4 d-block">
+                    <Field type="radio" name="license" value="licensed" className="form-check-input"/>
+                      Licensed
+                  </label>
+                  <label className="ml-4 d-block">
+                    <Field type="radio" name="license" value="not licensed" className="form-check-input"/>
+                    Not Licensed
+                  </label>
+                </div>
+              </div>
+              <ErrorMessage className="text-danger" name="license" component="p" />
+
+              <div className="form-group">
+                <label htmlFor="avatar" className="font-weight-bold">Student photo</label>
+                <Field
+                  type="file"
+                  className="form-control-file"
+                  accept="image/*"
+                  name="avatar"
+                  value={undefined}
+                  onChange={(event) => {
+                    setFieldValue('avatar', event.currentTarget.files[0]);
+                  }}
+                />
+              </div>
+                
+              <div className="mt-5">
+                <button type="submit" disabled={isSubmitting} className="btn btn-primary">
+                  Submit
+                </button>
+
+                {submitError && (
+                  <div className="mt-3">
+                    <Notification
+                      message={"There was an error submitting the form"}
+                      closeIcon={true}
+                      closeFn={() => setSubmitError(false)}
+                      type="danger"
+                    />
+                  </div>
+                )}
+              </div>
+            </Form>
+          </div>
+        </div>
+      )}
+    </Formik>
   )
 };
 

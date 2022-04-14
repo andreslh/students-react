@@ -1,12 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AgGridReact } from 'ag-grid-react';
 import request from '../config/request';
 import { StudentsContext } from '../context/StudentsProvider';
+import Notification from '../components/Notification';
+
+const MESSAGES = {
+  'student_added': 'The student was added successfully',
+  'student_updated': 'The student was updated successfully',
+}
 
 const Students = () => {
   const studentsContext = useContext(StudentsContext);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [message, setMessage] = useState(searchParams.get("message"));
 
   const [columns] = useState([
     { field: "id", width: 60, },
@@ -25,12 +33,21 @@ const Students = () => {
   return (
     <>
       <div className="row">
-        <div className="col-md-12 mt-5 mb-5 d-flex justify-content-end">
+        <div className="col-md-12 mt-5 mb-5 d-flex flex-row-reverse align-items-center justify-content-between">
           <button
             type="button"
             className="btn btn-primary"
             onClick={() => navigate('/add-student')}
-          >Add Student</button>
+          >
+            Add Student
+          </button>
+          { message && (
+            <Notification
+              message={MESSAGES[message]}
+              closeIcon={true}
+              closeFn={() => setMessage("")}
+            />
+          )}
         </div>
       </div>
       <div className="row">
@@ -43,7 +60,6 @@ const Students = () => {
           </div>
         </div>
       </div>
-      
     </>
   )
 };
