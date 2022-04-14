@@ -15,9 +15,7 @@ const StudentsProvider = ({ children }) => {
   const [students, dispatch] = React.useReducer(reducer, []);
 
   return (
-    <StudentsContext.Provider value={{ students, dispatch }}>
-      {children}
-    </StudentsContext.Provider>
+    <StudentsContext.Provider value={{ students, dispatch }}>{children}</StudentsContext.Provider>
   );
 };
 
