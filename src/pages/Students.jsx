@@ -5,6 +5,9 @@ import request from "../config/request";
 import { StudentsContext } from "../context/StudentsProvider";
 import Notification from "../components/Notification";
 import EditButton from "../components/EditButton";
+import SaveFilter from "../components/SaveFilter";
+import { FiltersContext } from "../context/FiltersProvider";
+import SelectFilter from "../components/SelectFilter";
 
 const MESSAGES = {
   student_added: "The student was added successfully",
@@ -14,6 +17,7 @@ const MESSAGES = {
 
 const Students = () => {
   const studentsContext = useContext(StudentsContext);
+  const filtersContext = useContext(FiltersContext);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [gridApi, setGridApi] = useState();
@@ -21,18 +25,25 @@ const Students = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const [columns] = useState([
-    { field: "id", width: 60, checkboxSelection: true, aggFunc: "sum" },
-    { field: "id", width: 60 },
-    { field: "firstName", flex: 1 },
-    { field: "lastName", flex: 1 },
-    { field: "username", flex: 1 },
-    { field: "schoolName", flex: 1 },
-    { field: "license", flex: 1 },
+    {
+      field: "id",
+      headerName: "Select",
+      sortable: true,
+      width: 60,
+      checkboxSelection: true,
+      aggFunc: "sum",
+    },
+    { field: "firstName", sortable: true },
+    { field: "lastName", sortable: true },
+    { field: "username", sortable: true },
+    { field: "schoolName", sortable: true },
+    { field: "license", sortable: true },
     {
       headerName: "Edit",
       field: "id",
       width: 100,
       cellRenderer: "EditButton",
+      filter: false,
     },
   ]);
 
@@ -41,7 +52,7 @@ const Students = () => {
     studentsContext.dispatch({ type: "set", payload: students });
   }, []);
 
-  const onGridReady = (params) => {
+  const handleGridReady = (params) => {
     setGridApi(params.api);
   };
 
@@ -62,19 +73,26 @@ const Students = () => {
     }
   };
 
+  const handleFilterChange = () =>
+    filtersContext.dispatch({ type: "update", payload: gridApi.getFilterModel() });
+
+  const handleSetFilter = (filter) => gridApi.setFilterModel(filter);
+
   return (
     <>
       <div className="row">
         <div className="col-md-12 mt-5 mb-5 d-flex flex-row-reverse align-items-center justify-content-between">
-          <button type="button" className="btn btn-danger" onClick={deleteSelected}>
-            Delete selected
-          </button>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={() => navigate("/add-student")}>
-            Add Student
-          </button>
+          <div>
+            <button
+              type="button"
+              className="btn btn-primary mr-5"
+              onClick={() => navigate("/add-student")}>
+              Add Student
+            </button>
+            <button type="button" className="btn btn-danger" onClick={deleteSelected}>
+              Delete selected
+            </button>
+          </div>
           {message && (
             <Notification
               message={MESSAGES[message]}
@@ -92,16 +110,33 @@ const Students = () => {
           )}
         </div>
       </div>
+
+      <div className="row">
+        <div className="col-md-12 d-flex justify-content-between align-center">
+          <div className="col-xs-6">
+            <SelectFilter onSelect={handleSetFilter} />
+          </div>
+          <div className="col-xs-6">
+            <SaveFilter />
+          </div>
+        </div>
+      </div>
+
       <div className="row">
         <div className="col-md-12">
           <div className="ag-theme-alpine" style={{ height: "100vh" }}>
             <AgGridReact
               rowData={studentsContext.students}
               columnDefs={columns}
+              defaultColDef={{
+                flex: 1,
+                filter: true,
+              }}
               frameworkComponents={{
                 EditButton,
               }}
-              onGridReady={onGridReady}
+              onGridReady={handleGridReady}
+              onFilterChanged={handleFilterChange}
               rowSelection={"multiple"}></AgGridReact>
           </div>
         </div>

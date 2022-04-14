@@ -8,14 +8,17 @@ import StudentsProvider from "./context/StudentsProvider";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+import FiltersProvider from "./context/FiltersProvider";
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
       <StudentsProvider>
-        <Layout>
-          <App></App>
-        </Layout>
+        <FiltersProvider>
+          <Layout>
+            <App></App>
+          </Layout>
+        </FiltersProvider>
       </StudentsProvider>
     </Router>
   </React.StrictMode>,
