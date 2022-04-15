@@ -35,7 +35,6 @@ const Students = () => {
       sortable: true,
       width: 60,
       checkboxSelection: true,
-      aggFunc: "sum",
     },
     { field: "firstName", sortable: true },
     { field: "lastName", sortable: true },
