@@ -8,12 +8,15 @@ import EditButton from "../components/EditButton";
 import SaveFilter from "../components/SaveFilter";
 import { FiltersContext } from "../context/FiltersProvider";
 import SelectFilter from "../components/SelectFilter";
+import PictureModal from "../components/PictureModal";
 
 const MESSAGES = {
   student_added: "The student was added successfully",
   student_updated: "The student was updated successfully",
   students_deleted: "The selected students were deleted",
 };
+
+const emptyProfilePictureData = { title: "", url: "" };
 
 const Students = () => {
   const studentsContext = useContext(StudentsContext);
@@ -23,6 +26,7 @@ const Students = () => {
   const [gridApi, setGridApi] = useState();
   const [message, setMessage] = useState(searchParams.get("message"));
   const [errorMessage, setErrorMessage] = useState("");
+  const [profilePictureData, setProfilePictureData] = useState(emptyProfilePictureData);
 
   const [columns] = useState([
     {
@@ -35,7 +39,15 @@ const Students = () => {
     },
     { field: "firstName", sortable: true },
     { field: "lastName", sortable: true },
-    { field: "username", sortable: true },
+    {
+      field: "username",
+      sortable: true,
+      onCellClicked: (cell) => {
+        const { firstName, lastName, avatar } = cell.data;
+        setProfilePictureData({ title: `${firstName} ${lastName}`, url: avatar });
+      },
+      cellStyle: { cursor: "pointer" },
+    },
     { field: "schoolName", sortable: true },
     { field: "license", sortable: true },
     {
@@ -141,6 +153,14 @@ const Students = () => {
           </div>
         </div>
       </div>
+
+      {profilePictureData.title && (
+        <PictureModal
+          title={profilePictureData.title}
+          url={profilePictureData.url}
+          onClose={() => setProfilePictureData(emptyProfilePictureData)}
+        />
+      )}
     </>
   );
 };

@@ -3,6 +3,8 @@ const dev = process.env.NODE_ENV !== "production";
 
 const server = dev ? "http://localhost:3001" : "https://theserver.com";
 
+export const IMG_PATH = `${server}/images/students/`;
+
 export async function request(
   url,
   config = {
