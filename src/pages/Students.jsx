@@ -14,6 +14,7 @@ const MESSAGES = {
   student_added: "The student was added successfully",
   student_updated: "The student was updated successfully",
   students_deleted: "The selected students were deleted",
+  filter_saved: "Filter saved correctly",
 };
 
 const emptyProfilePictureData = { title: "", url: "" };
@@ -91,6 +92,8 @@ const Students = () => {
 
   const handleResetFilter = () => gridApi.setFilterModel(null);
 
+  const handleSaveFilter = () => setMessage("filter_saved");
+
   return (
     <>
       <div className="row">
@@ -130,7 +133,7 @@ const Students = () => {
             <SelectFilter onSelect={handleSetFilter} onReset={handleResetFilter} />
           </div>
           <div className="col-xs-6">
-            <SaveFilter />
+            <SaveFilter onSave={handleSaveFilter} />
           </div>
         </div>
       </div>

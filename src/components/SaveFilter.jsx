@@ -3,7 +3,7 @@ import PropTypes from "proptypes";
 import { FiltersContext } from "../context/FiltersProvider";
 import request from "../config/request";
 
-const SaveFilter = () => {
+const SaveFilter = ({ onSave }) => {
   const [name, setName] = useState("");
   const { current, dispatch } = useContext(FiltersContext);
 
@@ -27,14 +27,13 @@ const SaveFilter = () => {
             data: current,
           },
         });
+        onSave();
       }
-
-      //TODO: Show notification
     }
   };
 
   return (
-    <div className="form-group">
+    <div className="form-group d-flex justify-content-end">
       <input
         type="text"
         className="form-control w-50 d-inline"
@@ -48,8 +47,8 @@ const SaveFilter = () => {
   );
 };
 
-SaveFilter.proptypes = {
-  getFilter: PropTypes.func.isRequired,
+SaveFilter.propTypes = {
+  onSave: PropTypes.func.isRequired,
 };
 
 export default SaveFilter;
