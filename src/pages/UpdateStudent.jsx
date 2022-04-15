@@ -49,9 +49,7 @@ const UpdateStudent = () => {
       title={`Update ${student.firstName} ${student.lastName}`}
       redirectTo="/?message=student_updated"
     />
-  ) : (
-    <div>div</div>
-  );
+  ) : null;
 };
 
 export default UpdateStudent;

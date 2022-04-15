@@ -135,8 +135,9 @@ const Students = () => {
 
       <div className="row">
         <div className="col-md-12">
-          <div className="ag-theme-alpine" style={{ height: "100vh" }}>
+          <div className="ag-theme-alpine">
             <AgGridReact
+              domLayout="autoHeight"
               rowData={studentsContext.students}
               columnDefs={columns}
               defaultColDef={{
