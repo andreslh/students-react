@@ -89,6 +89,8 @@ const Students = () => {
 
   const handleSetFilter = (filter) => gridApi.setFilterModel(filter);
 
+  const handleResetFilter = () => gridApi.setFilterModel(null);
+
   return (
     <>
       <div className="row">
@@ -125,7 +127,7 @@ const Students = () => {
       <div className="row">
         <div className="col-md-12 d-flex justify-content-between align-center">
           <div className="col-xs-6">
-            <SelectFilter onSelect={handleSetFilter} />
+            <SelectFilter onSelect={handleSetFilter} onReset={handleResetFilter} />
           </div>
           <div className="col-xs-6">
             <SaveFilter />
